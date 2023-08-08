@@ -262,6 +262,7 @@ function useHistoryStateNavigation(base: string) {
   }
 
   function push(to: HistoryLocation, data?: HistoryState) {
+    const realCurrentLocation = createCurrentLocation(base, location);
     // Add to current entry the information of where we are going
     // as well as saving the current position
     const currentState = assign(
@@ -272,6 +273,7 @@ function useHistoryStateNavigation(base: string) {
       historyState.value,
       history.state as Partial<StateEntry> | null,
       {
+        current : realCurrentLocation,
         forward: to,
         scroll: computeScrollPosition(),
       }
@@ -289,7 +291,7 @@ function useHistoryStateNavigation(base: string) {
 
     const state: StateEntry = assign(
       {},
-      buildState(currentLocation.value, to, null),
+      buildState(realCurrentLocation, to, null),
       { position: currentState.position + 1 },
       data
     )
